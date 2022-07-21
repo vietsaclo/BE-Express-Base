@@ -1,0 +1,24 @@
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_CONNECTION_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Trade {
+  user_id Int?
+  order_id       Int     @id @default(autoincrement())
+  order_status    Int
+  User     User?   @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], name: "author")
+}
+
+model User {
+  id   Int     @id @default(autoincrement())
+  api_key String
+  api_secret String
+  Trade Trade[]
+}
