@@ -22,3 +22,97 @@ model User {
   api_secret String
   Trade Trade[]
 }
+
+model NhanVien {
+  MaNV String @id @unique
+  TenNv String?
+  Ngaysinh DateTime
+  DiaChi String
+  DienThoai String
+  laAdmin Boolean
+  Matkhau String
+  phieuNhap PhieuNhap[]
+  phieuXuat PhieuXuat[]
+}
+
+model PhieuNhap {
+  SoPhieuNhap  Int @unique
+  ID Int @id @default(autoincrement())
+  NgayNhap DateTime @default(now())
+  MaNV String?
+  nhanVien NhanVien?   @relation(fields: [MaNV], references: [MaNV])
+  phieuNhapCtiet PhieuNhapCtiet?
+}
+
+model PhieuXuat {
+  SoPhieuXuat Int @unique
+  NgayXuat DateTime
+  MaNV String?
+  LoaiKH String
+  MaBan String
+  TienTra Float
+  TienDu Float
+  GhiChu String
+  ID Int @id @default(autoincrement())
+  ThanhToan Boolean
+  nhanVien NhanVien? @relation(fields: [MaNV], references: [MaNV])
+  ban Ban? @relation(fields: [MaBan], references: [MaBan])
+  phieuxuatCTiet PhieuXuatCTiet[]
+}
+
+model Ban {
+  MaBan String @unique
+  Ten String
+  Khuvuc String 
+  phieuXuat PhieuXuat[]
+}
+
+model PhieuXuatCTiet {
+  SoPhieuXuat Int @unique
+  MaHang String @unique
+  Soluong Int
+  DonGia Float
+  TraLai Boolean
+  phieuXuat PhieuXuat? @relation(fields: [SoPhieuXuat], references: [SoPhieuXuat])
+  hang Hang? @relation(fields: [MaHang], references: [MaHang])
+}
+
+model Hang {
+  MaHang String @unique
+  TenHang String?
+  GhiChu String
+  PhimTat String
+  phieuxuatCTiet PhieuXuatCTiet[]
+  gioHang GioHang[]
+  phieuNhapCtiet PhieuNhapCtiet[]
+}
+
+model GioHang {
+  MaHang String @unique
+  LoaiKH String @unique
+  GiaBan Float
+  hang Hang? @relation(fields: [MaHang], references: [MaHang])
+  loaiKH LoaiKhachHang? @relation(fields: [LoaiKH], references: [LoaiKH])
+}
+
+model LoaiKhachHang {
+  LoaiKH String @unique
+  Ten String
+  GhiChu String
+  gioHang GioHang[]
+}
+
+model PhieuNhapCtiet {
+  SoPhieuNhap Int @unique
+  MaHang String @unique
+  SoLuong Int
+  GiaNhap Float
+  hang Hang? @relation(fields: [MaHang], references: [MaHang])
+  phieuNhap PhieuNhap @relation(fields: [SoPhieuNhap], references: [SoPhieuNhap])
+}
+
+
+
+
+
+
